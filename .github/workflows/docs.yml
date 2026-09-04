@@ -39,17 +39,15 @@ jobs:
       - name: Set up Python
         run: uv python install 3.12
 
-      # Only the docs extra: building the site must not need MuJoCo, OpenCV or
-      # a serial port.
-      - name: Install documentation dependencies
-        run: uv pip install --system "mkdocs>=1.6,<2" "mkdocs-material>=9.5,<10"
-
       # The README is the site's landing page. Keeping one source avoids the
       # two drifting apart; the link rewrite fixes the paths that are relative
       # to the repository root but have to resolve from docs/.
+      # `uv run --no-project python` rather than bare `python`: without
+      # actions/setup-python the runner is not guaranteed to expose `python`
+      # on PATH. The script itself is stdlib only.
       - name: Generate the landing page from README.md
         run: |
-          python - <<'PY'
+          uv run --no-project python - <<'PY'
           import pathlib, re
 
           text = pathlib.Path("README.md").read_text()
@@ -68,8 +66,16 @@ jobs:
           print("docs/index.md written")
           PY
 
+      # `uv run --no-project` builds an ephemeral environment with just these two
+      # packages. It deliberately does NOT install this project: rendering the
+      # site must not need MuJoCo, OpenCV or a serial port. (`--system` would
+      # target the runner's /usr, which is externally managed -- PEP 668.)
       - name: Build the site
-        run: mkdocs build --strict --site-dir public
+        run: >
+          uv run --no-project
+          --with "mkdocs>=1.6,<2"
+          --with "mkdocs-material>=9.5,<10"
+          mkdocs build --strict --site-dir public
 
       - name: Upload the Pages artifact
         uses: actions/upload-pages-artifact@v3

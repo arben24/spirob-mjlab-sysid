@@ -35,13 +35,18 @@ jobs:
 
       # Core + dev only: the vision/hardware/gui extras are not needed to test
       # the model and the data, and pulling OpenCV and Qt would triple CI time.
+      # `--python` is required -- a bare `uv venv` takes the runner's default
+      # interpreter and would silently run both matrix legs on the same one.
+      # `uv sync` resolves from the committed uv.lock, which is the point of
+      # tracking it.
       - name: Install
-        run: |
-          uv venv
-          uv pip install -e ".[dev]"
+        run: uv sync --extra dev --python ${{ matrix.python-version }}
 
+      # `--extra dev` is required on every `uv run` as well, not just on the
+      # sync: a bare `uv run` re-syncs the environment to the default extras
+      # and would uninstall ruff and pytest before trying to launch them.
       - name: Lint
-        run: uv run ruff check .
+        run: uv run --extra dev ruff check .
 
       - name: Test
-        run: uv run pytest -q
+        run: uv run --extra dev pytest -q
