@@ -1,0 +1,2 @@
+joint,n_messungen,n_valide,n_ausreisser,omega_d_mean,omega_d_std,omega_n_mean,omega_n_std,zeta_mean,zeta_std,k_mean_Nm_rad,k_std,d_mean_Nms_rad,d_std
+data_joint_11,13,12,1,312.3784,5.1021,316.2001,5.8458,0.147897,0.044683,100.01666974,3.61788266,0.09375807,0.02917149

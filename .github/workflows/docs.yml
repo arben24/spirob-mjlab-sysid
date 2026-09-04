@@ -1,0 +1,93 @@
+# Build the MkDocs site and publish it to GitHub Pages.
+#
+# Adapted from a GitLab CI pipeline (stages -> jobs, GitLab Pages `public/`
+# artifact -> the actions/deploy-pages artifact). Two jobs: `build` renders the
+# site on every push and pull request so a broken build is caught in review;
+# `deploy` publishes, and only from `main`.
+#
+# One-time setup in the GitHub repository:
+#   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
+
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Least privilege: only the deploy job needs to write Pages.
+permissions:
+  contents: read
+
+# Never let two deploys race; let a newer push cancel an in-flight build.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      # Only the docs extra: building the site must not need MuJoCo, OpenCV or
+      # a serial port.
+      - name: Install documentation dependencies
+        run: uv pip install --system "mkdocs>=1.6,<2" "mkdocs-material>=9.5,<10"
+
+      # The README is the site's landing page. Keeping one source avoids the
+      # two drifting apart; the link rewrite fixes the paths that are relative
+      # to the repository root but have to resolve from docs/.
+      - name: Generate the landing page from README.md
+        run: |
+          python - <<'PY'
+          import pathlib, re
+
+          text = pathlib.Path("README.md").read_text()
+
+          # docs/img/x.png -> img/x.png   (the page already lives in docs/)
+          text = re.sub(r'(\(|src=")docs/img/', r'\1img/', text)
+          # docs/sysid/index.md -> sysid/index.md, etc.
+          text = re.sub(r'\((docs/)([^)]+\.md)\)', r'(\2)', text)
+          # links to repo files that have no page on the site -> GitHub
+          repo = "https://github.com/arben24/spirob-mjlab-sysid/blob/main"
+          for target in ("scripts/generate_model.py", "sysid/README.md",
+                         "rl/README.md", "data/README.md", "CLAUDE.md", "rl/"):
+              text = text.replace(f"]({target})", f"]({repo}/{target})")
+
+          pathlib.Path("docs/index.md").write_text(text)
+          print("docs/index.md written")
+          PY
+
+      - name: Build the site
+        run: mkdocs build --strict --site-dir public
+
+      - name: Upload the Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    # Only publish from main; pull requests build but do not deploy.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

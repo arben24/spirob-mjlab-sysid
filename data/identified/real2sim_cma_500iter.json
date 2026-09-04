@@ -1,0 +1,411 @@
+{
+  "mode": "finetune",
+  "cost": 9.856619821325232,
+  "joint_order": "All per-joint arrays are ordered by MuJoCo MODEL joint index i (0..njnt-1). index i = model joint 'model_joint' = real 'real_joint'. The model index follows the XML kinematic tree from the base: index 0 = bottom/base joint (j_12), index njnt-1 = tip (j_0). 'joints' lists the explicit per-joint mapping; the flat arrays match it element-wise and index directly into model.jnt_stiffness / model.dof_damping / model.dof_frictionloss.",
+  "joints": [
+    {
+      "model_index": 0,
+      "model_joint": "j_12",
+      "real_joint": "joint_1",
+      "stiffness": 0.1,
+      "damping": 0.0001,
+      "frictionloss": 9.85227168131271
+    },
+    {
+      "model_index": 1,
+      "model_joint": "j_11",
+      "real_joint": "joint_2",
+      "stiffness": 0.1,
+      "damping": 2.5611475947353286,
+      "frictionloss": 9.419077077716386
+    },
+    {
+      "model_index": 2,
+      "model_joint": "j_10",
+      "real_joint": "joint_3",
+      "stiffness": 0.1,
+      "damping": 7.825160560739045,
+      "frictionloss": 9.07456280302683
+    },
+    {
+      "model_index": 3,
+      "model_joint": "j_9",
+      "real_joint": "joint_4",
+      "stiffness": 0.1,
+      "damping": 15.849527923945807,
+      "frictionloss": 8.832414834259446
+    },
+    {
+      "model_index": 4,
+      "model_joint": "j_8",
+      "real_joint": "joint_5",
+      "stiffness": 0.1,
+      "damping": 26.76248392717797,
+      "frictionloss": 8.706319148429628
+    },
+    {
+      "model_index": 5,
+      "model_joint": "j_7",
+      "real_joint": "joint_6",
+      "stiffness": 0.1,
+      "damping": 40.69226281325789,
+      "frictionloss": 8.709961722552784
+    },
+    {
+      "model_index": 6,
+      "model_joint": "j_6",
+      "real_joint": "joint_7",
+      "stiffness": 0.1,
+      "damping": 57.76709882500795,
+      "frictionloss": 8.857028533644307
+    },
+    {
+      "model_index": 7,
+      "model_joint": "j_5",
+      "real_joint": "joint_8",
+      "stiffness": 0.1,
+      "damping": 78.11522620525045,
+      "frictionloss": 9.1612055587196
+    },
+    {
+      "model_index": 8,
+      "model_joint": "j_4",
+      "real_joint": "joint_9",
+      "stiffness": 0.1,
+      "damping": 101.86487919680783,
+      "frictionloss": 9.636178774794063
+    },
+    {
+      "model_index": 9,
+      "model_joint": "j_3",
+      "real_joint": "joint_10",
+      "stiffness": 0.1,
+      "damping": 129.14429204250243,
+      "frictionloss": 10.0
+    },
+    {
+      "model_index": 10,
+      "model_joint": "j_2",
+      "real_joint": "joint_11",
+      "stiffness": 0.1,
+      "damping": 160.08169898515652,
+      "frictionloss": 10.0
+    },
+    {
+      "model_index": 11,
+      "model_joint": "j_1",
+      "real_joint": "joint_12",
+      "stiffness": 0.1,
+      "damping": 194.80533426759257,
+      "frictionloss": 10.0
+    },
+    {
+      "model_index": 12,
+      "model_joint": "j_0",
+      "real_joint": "joint_13",
+      "stiffness": 0.1,
+      "damping": 200.1,
+      "frictionloss": 10.0
+    }
+  ],
+  "stiffness": [
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1
+  ],
+  "damping": [
+    0.0001,
+    2.5611475947353286,
+    7.825160560739045,
+    15.849527923945807,
+    26.76248392717797,
+    40.69226281325789,
+    57.76709882500795,
+    78.11522620525045,
+    101.86487919680783,
+    129.14429204250243,
+    160.08169898515652,
+    194.80533426759257,
+    200.1
+  ],
+  "frictionloss": [
+    9.85227168131271,
+    9.419077077716386,
+    9.07456280302683,
+    8.832414834259446,
+    8.706319148429628,
+    8.709961722552784,
+    8.857028533644307,
+    9.1612055587196,
+    9.636178774794063,
+    10.0,
+    10.0,
+    10.0,
+    10.0
+  ],
+  "tendons": [
+    {
+      "tendon_index": 0,
+      "tendon_stiffness": 20.884568864836442,
+      "tendon_damping": 0.04830603226857606,
+      "tendon_frictionloss": 0.016514065474856728
+    },
+    {
+      "tendon_index": 1,
+      "tendon_stiffness": 20.884568864836442,
+      "tendon_damping": 0.04830603226857606,
+      "tendon_frictionloss": 0.016514065474856728
+    }
+  ],
+  "tendon_stiffness": [
+    20.884568864836442,
+    20.884568864836442
+  ],
+  "tendon_damping": [
+    0.04830603226857606,
+    0.04830603226857606
+  ],
+  "tendon_frictionloss": [
+    0.016514065474856728,
+    0.016514065474856728
+  ],
+  "options": {
+    "impratio": 15.0
+  },
+  "solver_knobs": {
+    "armature": 0.035992649432991526,
+    "solreflimit_time": 0.0072925232524435855,
+    "solreflimit_damp": 4.210659599624928,
+    "solimplimit_dmin": 0.9872399447353575,
+    "solimplimit_dmax": 0.9680347199349496,
+    "solimplimit_width": 0.013360049675592156,
+    "solreffriction_time": 0.08285411924024201,
+    "solreffriction_damp": 2.7163755486839434,
+    "solimpfriction_dmin": 0.7365279753796501,
+    "solimpfriction_dmax": 0.9198225489322306,
+    "solimpfriction_width": 0.006273692015043742
+  },
+  "identified_anchors": {
+    "joint_1": {
+      "k": 0.67006038,
+      "d": 0.00191221
+    },
+    "joint_8": {
+      "k": 0.83197551,
+      "d": 0.00096463
+    },
+    "joint_11": {
+      "k": 0.37038596,
+      "d": 0.00026318
+    },
+    "joint_14": {
+      "k": 0.69248661,
+      "d": 0.00228285
+    }
+  },
+  "used_anchor_joints": [
+    "joint_1",
+    "joint_8",
+    "joint_11",
+    "joint_14"
+  ],
+  "groups": [
+    {
+      "name": "stiffness",
+      "optimize": true,
+      "representation": "poly",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.1,
+        200.0
+      ]
+    },
+    {
+      "name": "damping",
+      "optimize": true,
+      "representation": "poly",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.0001,
+        200.1
+      ]
+    },
+    {
+      "name": "frictionloss",
+      "optimize": true,
+      "representation": "poly",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.0,
+        10.0
+      ]
+    },
+    {
+      "name": "tendon_stiffness",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        1.0,
+        1000.0
+      ]
+    },
+    {
+      "name": "tendon_damping",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.0,
+        200.0
+      ]
+    },
+    {
+      "name": "tendon_frictionloss",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.0,
+        20.0
+      ]
+    },
+    {
+      "name": "armature",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.0001,
+        0.1
+      ]
+    },
+    {
+      "name": "solreflimit_time",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.002,
+        0.2
+      ]
+    },
+    {
+      "name": "solreflimit_damp",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.1,
+        5.0
+      ]
+    },
+    {
+      "name": "solimplimit_dmin",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.5,
+        0.99
+      ]
+    },
+    {
+      "name": "solimplimit_dmax",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.9,
+        0.9999
+      ]
+    },
+    {
+      "name": "solimplimit_width",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.0001,
+        0.02
+      ]
+    },
+    {
+      "name": "solreffriction_time",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.002,
+        0.2
+      ]
+    },
+    {
+      "name": "solreffriction_damp",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.1,
+        5.0
+      ]
+    },
+    {
+      "name": "solimpfriction_dmin",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.5,
+        0.99
+      ]
+    },
+    {
+      "name": "solimpfriction_dmax",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.9,
+        0.9999
+      ]
+    },
+    {
+      "name": "solimpfriction_width",
+      "optimize": true,
+      "representation": "shared",
+      "poly_degree": 3,
+      "band": 0.3,
+      "bounds": [
+        0.0001,
+        0.02
+      ]
+    }
+  ]
+}

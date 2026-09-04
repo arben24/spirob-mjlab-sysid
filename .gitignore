@@ -1,0 +1,92 @@
+# =============================================================================
+# Generated output
+# =============================================================================
+# Every script in this repo writes to build/ (see src/spirob/paths.py).
+# Nothing generated is ever tracked -- figures, fitted parameters, videos and
+# recordings are all reproducible from data/ + models/.
+build/
+site/                      # mkdocs build output
+public/
+
+# Figures/videos anywhere outside the two tracked image folders. The negations
+# below re-admit exactly the assets the documentation embeds.
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.avi
+*.mov
+*.webm
+*.pdf
+*.svg
+!docs/img/**
+!docs/**/img/**
+
+# Large raw capture material never belongs in git.
+Video/
+videos/
+*.MP4
+*.MOV
+*.insv
+
+# =============================================================================
+# Python
+# =============================================================================
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+.env
+*.egg-info/
+.eggs/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+.ipynb_checkpoints/
+
+# uv resolves from pyproject.toml; the lock file IS tracked for reproducibility.
+# (Do not add uv.lock here.)
+
+# =============================================================================
+# MuJoCo / simulation leftovers
+# =============================================================================
+MUJOCO_LOG.TXT
+*.mjb
+
+# Model XMLs are tracked in models/ only -- generated ones elsewhere are not.
+/*.xml
+/spiral_chain*.xml
+
+# =============================================================================
+# MATLAB / Simulink
+# =============================================================================
+*.asv
+*.m~
+*.mex*
+*.slxc
+*.slx.original
+*.autosave
+slprj/
+sccprj/
+codegen/
+octave-workspace
+matlab_crash_dump*
+
+# =============================================================================
+# Editors / OS
+# =============================================================================
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Generated from README.md by the docs workflow -- do not edit or commit.
+docs/index.md

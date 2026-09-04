@@ -1,0 +1,63 @@
+[project]
+name = "spirob-mjlab-sysid"
+version = "0.1.0"
+description = "SpiRob: MuJoCo model generation and system identification for a tendon-driven logarithmic-spiral continuum robot"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Nico Beyer" }]
+
+# Core: everything needed to generate the model, run the simulation-based
+# system identification and reproduce every figure in the docs.
+dependencies = [
+    "mujoco>=3.3.7",
+    "numpy>=1.26",
+    "scipy>=1.15",
+    "polars>=1.35",
+    "pyarrow>=15.0",
+    "pandas>=2.2",
+    "pyyaml>=6.0",
+    "pydantic>=2.0",
+    "matplotlib>=3.10",
+    "cma>=4.4",
+]
+
+[project.optional-dependencies]
+# Reading the GoPro recordings and the ArUco joint tracking.
+vision = ["opencv-contrib-python>=4.13", "imageio[ffmpeg]>=2.34"]
+# Talking to the ESP32 motor controller / accelerometer boards over serial.
+hardware = ["pyserial>=3.5"]
+# Interactive Qt tools (live dashboard, sensor monitor).
+gui = ["pyqtgraph>=0.13", "pyqt6>=6.6"]
+# Building the MkDocs site.
+docs = ["mkdocs>=1.6,<2", "mkdocs-material>=9.5,<10"]
+dev = ["pytest>=8.0", "ruff>=0.14"]
+
+[project.urls]
+Repository = "https://github.com/arben24/spirob-mjlab-sysid"
+Documentation = "https://arben24.github.io/spirob-mjlab-sysid/"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/spirob"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = ["-ra", "-q"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+ignore = [
+    "E501",   # line length -- the tables and ASCII diagrams in docstrings need the room
+    "E701",   # one-line `if`: used deliberately in the plotting code for compact guards
+    "E702",   # semicolons: same, in the dashboard's per-axis setup blocks
+    "UP031",  # %-formatting: two long report strings in real2sim.py read better as-is
+]

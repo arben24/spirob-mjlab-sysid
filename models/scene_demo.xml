@@ -1,0 +1,23 @@
+<mujoco model="SpiRob demo scene">
+  <!-- Rendering-only wrapper: the identified model plus lights, a skybox and a
+       ground material, so scripts/render_demo.py produces a readable video
+       without touching the tracked model itself. -->
+  <include file="spirob_13seg_identified.xml"/>
+
+  <visual>
+    <headlight diffuse="0.55 0.55 0.55" ambient="0.35 0.35 0.35" specular="0.15 0.15 0.15"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global offwidth="1920" offheight="1080"/>
+    <quality shadowsize="4096"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.35 0.45 0.58" rgb2="0.08 0.10 0.14"
+             width="512" height="3072"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0.3 -0.6 0.9" dir="-0.3 0.6 -0.9" directional="true"
+           diffuse="0.7 0.7 0.7" specular="0.2 0.2 0.2"/>
+  </worldbody>
+</mujoco>

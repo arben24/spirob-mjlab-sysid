@@ -1,0 +1,10 @@
+# Static load test, joint 11. Lever arm r = 0.050 m, alpha = 90 deg.
+mass_g,angle_deg
+0,0
+85,5
+143,10
+178,15
+225,20
+240,25
+270,27
+380,30

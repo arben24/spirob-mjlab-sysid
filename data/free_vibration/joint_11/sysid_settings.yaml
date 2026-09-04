@@ -1,0 +1,171 @@
+settings:
+  sensor_id: 0
+  J: 2.83e-06
+  lowpass_enabled: false
+  lowpass_cutoff_hz: 50.0
+  lowpass_order: 4
+  peak_prominence_factor: 0.0991
+  peak_min_distance_s: 0.015
+  min_peaks_required: 3
+  outlier_sigma: 2.003
+  trigger_mode: jump
+  start_overrides:
+    spirob_messung_20260702_140540.csv: 0.92565
+    spirob_messung_20260702_140557.csv: 0.56694
+    spirob_messung_20260702_140601.csv: 0.53317
+    spirob_messung_20260702_140606.csv: 0.77502
+    spirob_messung_20260702_140611.csv: 0.55666
+    spirob_messung_20260702_140616.csv: 0.51156
+    spirob_messung_20260702_140623.csv: 0.67086
+    spirob_messung_20260702_140627.csv: 0.28652
+    spirob_messung_20260702_140631.csv: 0.46442
+    spirob_messung_20260702_140635.csv: 0.37783
+    spirob_messung_20260702_140640.csv: 0.42064
+results:
+  timestamp: '2026-07-02T16:57:10'
+  folder: data_joint_11
+  n_measurements: 13
+  n_valid: 12
+  n_outliers: 1
+  n_failed: 0
+  omega_d_mean: 358.7641
+  omega_d_std: 0.0702
+  omega_n_mean: 361.7711
+  omega_n_std: 0.303
+  zeta_mean: 0.128527
+  zeta_std: 0.005815
+  k_mean: 0.37038596
+  k_std: 0.00062026
+  d_mean: 0.00026318
+  d_std: 1.211e-05
+  per_file:
+  - file: spirob_messung_20260702_140540.csv
+    omega_d: 334.871
+    omega_n: 337.2413
+    f_n: 53.6736
+    zeta: 0.118352
+    delta: 0.748889
+    k: 0.32186062
+    d: 0.00022591
+    n_peaks: 7
+    outlier: true
+  - file: spirob_messung_20260702_140545.csv
+    omega_d: 358.7112
+    omega_n: 361.1143
+    f_n: 57.4731
+    zeta: 0.115173
+    delta: 0.728503
+    k: 0.36904193
+    d: 0.0002354
+    n_peaks: 8
+    outlier: false
+  - file: spirob_messung_20260702_140551.csv
+    omega_d: 358.8341
+    omega_n: 362.0896
+    f_n: 57.6283
+    zeta: 0.133793
+    delta: 0.848273
+    k: 0.37103803
+    d: 0.0002742
+    n_peaks: 7
+    outlier: false
+  - file: spirob_messung_20260702_140557.csv
+    omega_d: 358.7112
+    omega_n: 361.3815
+    f_n: 57.5157
+    zeta: 0.121342
+    delta: 0.768092
+    k: 0.36958844
+    d: 0.0002482
+    n_peaks: 8
+    outlier: false
+  - file: spirob_messung_20260702_140601.csv
+    omega_d: 358.7931
+    omega_n: 361.5717
+    f_n: 57.5459
+    zeta: 0.123735
+    delta: 0.783473
+    k: 0.36997753
+    d: 0.00025322
+    n_peaks: 8
+    outlier: false
+  - file: spirob_messung_20260702_140606.csv
+    omega_d: 358.7522
+    omega_n: 361.8956
+    f_n: 57.5975
+    zeta: 0.131517
+    delta: 0.833583
+    k: 0.37064062
+    d: 0.00026939
+    n_peaks: 8
+    outlier: false
+  - file: spirob_messung_20260702_140611.csv
+    omega_d: 358.7931
+    omega_n: 361.742
+    f_n: 57.573
+    zeta: 0.127426
+    delta: 0.807222
+    k: 0.37032614
+    d: 0.0002609
+    n_peaks: 8
+    outlier: false
+  - file: spirob_messung_20260702_140616.csv
+    omega_d: 358.7931
+    omega_n: 361.8968
+    f_n: 57.5977
+    zeta: 0.130686
+    delta: 0.828227
+    k: 0.37064315
+    d: 0.00026769
+    n_peaks: 8
+    outlier: false
+  - file: spirob_messung_20260702_140623.csv
+    omega_d: 358.7931
+    omega_n: 361.9192
+    f_n: 57.6012
+    zeta: 0.13115
+    delta: 0.831217
+    k: 0.37068893
+    d: 0.00026866
+    n_peaks: 6
+    outlier: false
+  - file: spirob_messung_20260702_140627.csv
+    omega_d: 358.7931
+    omega_n: 362.1719
+    f_n: 57.6415
+    zeta: 0.136278
+    delta: 0.864321
+    k: 0.37120691
+    d: 0.00027935
+    n_peaks: 8
+    outlier: false
+  - file: spirob_messung_20260702_140631.csv
+    omega_d: 358.5679
+    omega_n: 361.5571
+    f_n: 57.5436
+    zeta: 0.128323
+    delta: 0.812999
+    k: 0.3699476
+    d: 0.0002626
+    n_peaks: 7
+    outlier: false
+  - file: spirob_messung_20260702_140635.csv
+    omega_d: 358.7931
+    omega_n: 362.1114
+    f_n: 57.6318
+    zeta: 0.135069
+    delta: 0.85651
+    k: 0.37108287
+    d: 0.00027683
+    n_peaks: 8
+    outlier: false
+  - file: spirob_messung_20260702_140640.csv
+    omega_d: 358.8341
+    omega_n: 361.8022
+    f_n: 57.5826
+    zeta: 0.127827
+    delta: 0.809806
+    k: 0.37044932
+    d: 0.00026176
+    n_peaks: 7
+    outlier: false

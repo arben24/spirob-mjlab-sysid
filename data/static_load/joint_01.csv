@@ -1,0 +1,9 @@
+# Static load test, joint 1 (base). Lever arm r = 0.077 m, alpha = 90 deg.
+# mass_g: mass on the precision scale; angle_deg: joint deflection from forward kinematics.
+mass_g,angle_deg
+0,0
+130,10
+161,15
+201,20
+210,25
+420,30

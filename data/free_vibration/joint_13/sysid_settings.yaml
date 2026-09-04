@@ -1,0 +1,305 @@
+settings:
+  sensor_id: 0
+  J: 0.0001054
+  lowpass_enabled: false
+  lowpass_cutoff_hz: 50.0
+  lowpass_order: 4
+  peak_prominence_factor: 0.1953
+  peak_min_distance_s: 0.02
+  min_peaks_required: 3
+  outlier_sigma: 1.992
+  trigger_mode: jump
+  start_overrides:
+    spirob_messung_20260702_154710.csv: 0.79517
+    spirob_messung_20260702_154714.csv: 0.80889
+    spirob_messung_20260702_154718.csv: 1.01069
+    spirob_messung_20260702_154722.csv: 0.86217
+    spirob_messung_20260702_154726.csv: 0.71342
+    spirob_messung_20260702_154729.csv: 0.60128
+    spirob_messung_20260702_154733.csv: 0.85171
+    spirob_messung_20260702_154737.csv: 0.65957
+    spirob_messung_20260702_154740.csv: 0.64765
+    spirob_messung_20260702_154858.csv: 0.42204
+    spirob_messung_20260702_154905.csv: 0.74562
+    spirob_messung_20260702_154908.csv: 0.70551
+    spirob_messung_20260702_154912.csv: 0.69574
+    spirob_messung_20260702_154915.csv: 0.60094
+    spirob_messung_20260702_154918.csv: 0.48558
+    spirob_messung_20260702_154925.csv: 1.2839
+    spirob_messung_20260702_154929.csv: 0.40115
+    spirob_messung_20260702_154932.csv: 0.47147
+    spirob_messung_20260702_154936.csv: 0.52231
+    spirob_messung_20260702_154939.csv: 0.38583
+    spirob_messung_20260702_154943.csv: 0.50696
+    spirob_messung_20260702_154946.csv: 0.76946
+    spirob_messung_20260702_154949.csv: 0.49277
+    spirob_messung_20260702_154953.csv: 0.68093
+    spirob_messung_20260702_154956.csv: 0.43562
+results:
+  timestamp: '2026-07-29T16:01:17'
+  folder: data_joint_14
+  n_measurements: 25
+  n_valid: 23
+  n_outliers: 2
+  n_failed: 0
+  omega_d_mean: 80.3122
+  omega_d_std: 1.5547
+  omega_n_mean: 81.0408
+  omega_n_std: 1.5736
+  zeta_mean: 0.133619
+  zeta_std: 0.006394
+  k_mean: 0.69248661
+  k_std: 0.02689968
+  d_mean: 0.00228285
+  d_std: 0.00012212
+  per_file:
+  - file: spirob_messung_20260702_154710.csv
+    omega_d: 79.7207
+    omega_n: 80.4533
+    f_n: 12.8045
+    zeta: 0.134646
+    delta: 0.853784
+    k: 0.6822263
+    d: 0.00228355
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154714.csv
+    omega_d: 81.0117
+    omega_n: 81.7528
+    f_n: 13.0114
+    zeta: 0.134345
+    delta: 0.851839
+    k: 0.70444321
+    d: 0.00231524
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154718.csv
+    omega_d: 82.3376
+    omega_n: 83.1134
+    f_n: 13.2279
+    zeta: 0.136307
+    delta: 0.864508
+    k: 0.72808536
+    d: 0.00238813
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154722.csv
+    omega_d: 81.02
+    omega_n: 81.7408
+    f_n: 13.0095
+    zeta: 0.132507
+    delta: 0.839972
+    k: 0.70423669
+    d: 0.00228322
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154726.csv
+    omega_d: 82.3376
+    omega_n: 83.0499
+    f_n: 13.2178
+    zeta: 0.130684
+    delta: 0.828214
+    k: 0.72697338
+    d: 0.00228787
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154729.csv
+    omega_d: 81.0148
+    omega_n: 81.6881
+    f_n: 13.0011
+    zeta: 0.128124
+    delta: 0.811718
+    k: 0.70332815
+    d: 0.00220628
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154733.csv
+    omega_d: 79.7278
+    omega_n: 80.4424
+    f_n: 12.8028
+    zeta: 0.133
+    delta: 0.843157
+    k: 0.68204145
+    d: 0.00225532
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154737.csv
+    omega_d: 79.7247
+    omega_n: 80.4439
+    f_n: 12.803
+    zeta: 0.13342
+    delta: 0.845867
+    k: 0.68206722
+    d: 0.00226249
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154740.csv
+    omega_d: 86.593
+    omega_n: 87.3824
+    f_n: 13.9073
+    zeta: 0.134119
+    delta: 0.850376
+    k: 0.8048018
+    d: 0.0024705
+    n_peaks: 6
+    outlier: true
+  - file: spirob_messung_20260702_154858.csv
+    omega_d: 86.6049
+    omega_n: 87.3705
+    f_n: 13.9054
+    zeta: 0.132094
+    delta: 0.837306
+    k: 0.80458195
+    d: 0.00243286
+    n_peaks: 6
+    outlier: true
+  - file: spirob_messung_20260702_154905.csv
+    omega_d: 81.0253
+    omega_n: 81.9507
+    f_n: 13.0429
+    zeta: 0.14986
+    delta: 0.95235
+    k: 0.70785788
+    d: 0.00258886
+    n_peaks: 4
+    outlier: false
+  - file: spirob_messung_20260702_154908.csv
+    omega_d: 81.019
+    omega_n: 81.9947
+    f_n: 13.0499
+    zeta: 0.153812
+    delta: 0.978071
+    k: 0.7086185
+    d: 0.00265857
+    n_peaks: 4
+    outlier: false
+  - file: spirob_messung_20260702_154912.csv
+    omega_d: 81.0169
+    omega_n: 81.7728
+    f_n: 13.0145
+    zeta: 0.135652
+    delta: 0.86028
+    k: 0.70478729
+    d: 0.00233833
+    n_peaks: 6
+    outlier: false
+  - file: spirob_messung_20260702_154915.csv
+    omega_d: 83.7211
+    omega_n: 84.4468
+    f_n: 13.4401
+    zeta: 0.130821
+    delta: 0.829098
+    k: 0.75163577
+    d: 0.0023288
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154918.csv
+    omega_d: 78.48
+    omega_n: 79.1597
+    f_n: 12.5986
+    zeta: 0.130761
+    delta: 0.828714
+    k: 0.66046279
+    d: 0.002182
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154925.csv
+    omega_d: 78.4859
+    omega_n: 79.2442
+    f_n: 12.6121
+    zeta: 0.138011
+    delta: 0.875524
+    k: 0.66187379
+    d: 0.00230542
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154929.csv
+    omega_d: 78.4888
+    omega_n: 79.1557
+    f_n: 12.598
+    zeta: 0.129537
+    delta: 0.820819
+    k: 0.66039712
+    d: 0.00216145
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154932.csv
+    omega_d: 79.7257
+    omega_n: 80.4263
+    f_n: 12.8002
+    zeta: 0.131701
+    delta: 0.834775
+    k: 0.68176818
+    d: 0.00223285
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154936.csv
+    omega_d: 77.2735
+    omega_n: 77.9678
+    f_n: 12.409
+    zeta: 0.133157
+    delta: 0.844167
+    k: 0.64072431
+    d: 0.00218852
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154939.csv
+    omega_d: 79.7247
+    omega_n: 80.3701
+    f_n: 12.7913
+    zeta: 0.126474
+    delta: 0.80109
+    k: 0.6808158
+    d: 0.00214272
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154943.csv
+    omega_d: 78.4839
+    omega_n: 79.1742
+    f_n: 12.601
+    zeta: 0.131766
+    delta: 0.83519
+    k: 0.660706
+    d: 0.00219916
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154946.csv
+    omega_d: 81.0075
+    omega_n: 81.7327
+    f_n: 13.0082
+    zeta: 0.132913
+    delta: 0.842592
+    k: 0.70409603
+    d: 0.00228999
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154949.csv
+    omega_d: 81.0086
+    omega_n: 81.6661
+    f_n: 12.9976
+    zeta: 0.126643
+    delta: 0.802179
+    k: 0.70294963
+    d: 0.00218018
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154953.csv
+    omega_d: 78.48
+    omega_n: 79.1827
+    f_n: 12.6023
+    zeta: 0.132931
+    delta: 0.842709
+    k: 0.66084745
+    d: 0.00221885
+    n_peaks: 5
+    outlier: false
+  - file: spirob_messung_20260702_154956.csv
+    omega_d: 82.3452
+    omega_n: 83.0085
+    f_n: 13.2112
+    zeta: 0.126168
+    delta: 0.799121
+    k: 0.7262497
+    d: 0.00220771
+    n_peaks: 5
+    outlier: false

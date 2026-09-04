@@ -1,0 +1,79 @@
+site_name: SpiRob — Model & System Identification
+site_description: MuJoCo model generation and experimental parameter identification for a tendon-driven logarithmic-spiral continuum robot
+site_author: Nico Beyer
+repo_url: https://github.com/arben24/spirob-mjlab-sysid
+repo_name: arben24/spirob-mjlab-sysid
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.sections
+    - navigation.indexes
+    - content.code.copy
+    - content.action.edit
+    - toc.follow
+
+nav:
+  - Home: index.md
+  - Model:
+      - model/index.md
+      - Geometry: model/geometry.md
+      - MuJoCo model: model/mujoco.md
+  - System identification:
+      - sysid/index.md
+      - Direct measurement: sysid/direct-measurement.md
+      - Simulation-based: sysid/simulation-based.md
+      - Results & discussion: sysid/results.md
+      - Reproducing it: sysid/reproducing.md
+  - Reinforcement learning:
+      - rl/index.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/arben24/spirob-mjlab-sysid
