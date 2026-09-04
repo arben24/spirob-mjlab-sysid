@@ -5,10 +5,10 @@ repository.
 
 ## What this repository is
 
-MuJoCo model generation and experimental system identification for the SpiRob, a
-tendon-driven quasi-continuum robot with a logarithmic-spiral body. The
-identification half is **complete**; the reinforcement-learning half
-([`rl/`](rl/)) is **scaffolded but not implemented**.
+MuJoCo model generation, experimental system identification and reinforcement
+learning for the SpiRob, a tendon-driven quasi-continuum robot with a
+logarithmic-spiral body. Both halves are built: `sysid/` identifies the model,
+`rl/` trains policies on it with [mjlab](https://github.com/mujocolab/mjlab).
 
 Read [`README.md`](README.md) first, then the folder README of wherever you are
 working. They are the specification; this file is the operating manual.
@@ -16,6 +16,11 @@ working. They are the specification; this file is the operating manual.
 ## Commands
 
 Everything uses **uv**. Never pip, conda or manual virtualenvs.
+
+**Two environments.** The repository root is a Python 3.10 project (sysid);
+`rl/` is a *separate* uv project on Python 3.13 with its own `.venv`, because
+mjlab needs torch + CUDA + MuJoCo-Warp and 3.13. `uv run` from the root gets the
+sysid environment, `uv run` from `rl/` gets the RL one. Never merge them.
 
 ```bash
 uv venv && uv pip install -e ".[vision,hardware,gui,docs,dev]"
@@ -38,6 +43,22 @@ uv run sysid/figures/fig_validation.py           # ~1 min (re-simulates 60 s)
 uv run sysid/figures/fig_sim2sim.py              # ~5 s
 
 uv run mkdocs serve                              # documentation site
+```
+
+From `rl/` (the RL environment — needs an NVIDIA GPU):
+
+```bash
+cd rl && uv sync --extra hardware --extra dev
+
+uv run train RlExplor-Spirob-Tcp-Reach --env.scene.num-envs 4096
+uv run play  RlExplor-Spirob-Tcp-Reach --checkpoint-file <path>/model_499.pt
+uv run play  RlExplor-Spirob-Tcp-Reach-DrPlay --checkpoint-file <path>/model_499.pt
+uv run infer RlExplor-Spirob-Tcp-Reach --obs-file obs.npy
+
+uv run --extra dev pytest                        # needs a GPU; not run in CI
+uv run python -m spirob_rl.tasks.spirob._make_pose_table   # regenerate the shape targets
+uv run python -m spirob_rl.rig.workspace_sweep --figure    # reachability map
+uv run python -m spirob_rl.rig.policy_bridge <task-id> --port /dev/ttyUSB0 --dry-run
 ```
 
 ## Non-negotiables
@@ -74,7 +95,25 @@ If you regenerate it, re-apply them or explicitly decide not to — the
 `ctrlrange` one in particular, because measured forces reach ~110 N.
 
 **Keep `sysid/` and `rl/` separate.** `sysid/` produces a model, `rl/` consumes
-one. No imports across that line; both may use `src/spirob/`.
+one. No imports across that line; both may use `src/spirob/`. They are also
+separate uv projects with separate interpreters — do not add mjlab to the root
+`pyproject.toml`, and do not import `sysid` modules from `rl/`.
+
+**The RL task family is taken 1:1 from the RL_explor repository.** Task ids
+(`RlExplor-Spirob-*`) and experiment names (`rl_explor_spirob_*`) are kept
+verbatim on purpose: they are the directory names existing checkpoints live
+under. Renaming one orphans every run trained before the rename. What *was*
+changed on import: the package name (`spirob_rl`, so it cannot shadow the
+installed `spirob`), the model path (now `spirob.paths.RL_MODEL`), the output
+directories (now `build/rl/...`) and the figure language (now English by
+default, German under `SPIROB_FIG_LOCALE=de`, like every other figure here).
+The ESP32 firmware and the onboard-policy export were deliberately left behind.
+
+**`models/spirob_13seg_rl.xml` is not `spirob_13seg_identified.xml`.** It is a
+different real-to-sim run, and it is what every trained policy's dynamics are.
+Swapping it invalidates every checkpoint. It also has no ground plane — the
+plane geom is misspelled `<!geom …>` and MuJoCo skips it silently; fixing that
+typo would add contacts that no trained policy has ever seen.
 
 ## The result you must not misrepresent
 
@@ -117,6 +156,10 @@ measured tendon forces + ArUco joint angles (data/trajectories/*.parquet)
 | `src/spirob/plotstyle.py` | shared figure style + locale switch |
 | `sysid/simulation_based/real2sim.py` | the main identification (1900 lines) |
 | `sysid/direct/free_vibration_gui.py` | where `J` and the per-joint `k`/`d` are set |
+| `rl/src/spirob_rl/tasks/spirob/base_env_cfg.py` | the shared RL env: action, sensor ladder, DR, PPO config |
+| `rl/src/spirob_rl/tasks/spirob/mdp/constants.py` | entity handles, `DR_TARGETS`, the tendon constants |
+| `rl/src/spirob_rl/cli.py` | the only local addition to mjlab's CLI: `--log-root` defaults to `build/rl/logs` |
+| `rl/src/spirob_rl/rig/observation.py` | rebuilds the actor observation vector from live sensors |
 
 Import from `spirob` (the package `__init__`), not from submodules, except
 `spirob.paths` and `spirob.plotstyle` which are imported directly by convention.
@@ -144,6 +187,16 @@ Import from `spirob` (the package `__init__`), not from submodules, except
 * **Ctrl+C during a finetune** stops cleanly and still saves the best result.
 * **EGL teardown prints a harmless `EGLError`** at interpreter exit after
   headless rendering. Ignore it.
+* **RL: two switches decide the whole DR story.** `ENABLE_DOMAIN_RANDOMIZATION`
+  and `ENABLE_DR_CURRICULUM` at the top of `base_env_cfg.py`; the widths are
+  `DR_TARGETS` in `mdp/constants.py`. Every term uses `operation="scale"` so the
+  model's per-segment spread survives — an absolute range would flatten it.
+* **RL: the observation layout is read off the task, never hard-coded.** The rig
+  bridge builds the env at startup and reads term order, width and history depth
+  from mjlab's observation manager. A wrong layout raises nothing; the rig just
+  moves wrong.
+* **RL: mjlab logs to wandb by default.** `--agent.logger tensorboard` avoids the
+  login prompt.
 * **`.gitignore` blanket-ignores images and PDFs** with a negation for
   `docs/img/**`. To publish a new figure, copy it from `build/` into `docs/img/`.
 
@@ -153,7 +206,9 @@ Markdown throughout, built with MkDocs Material, deployed to GitHub Pages by
 `.github/workflows/docs.yml` on push to `main`.
 
 * `README.md` — the overview and the headline results. Keep it short.
-* `docs/` — the long-form write-up (`model/`, `sysid/`, `rl/`).
+* `docs/` — the long-form write-up (`model/`, `sysid/`, `rl/`). The RL section
+  is `docs/rl/{index,tasks,training,rig}.md`; keep it in step with
+  `rl/README.md` (how to *use* the folder) rather than duplicating it.
 * Folder `README.md` files — how to *use* that folder.
 
 `docs/index.md` is generated from `README.md` during the CI build; do not edit

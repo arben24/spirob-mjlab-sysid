@@ -1,0 +1,282 @@
+<mujoco model="Spirob">
+  <compiler angle="radian"/>
+
+  <option timestep="0.004" impratio="18.7818" cone="elliptic" iterations="20"/>
+
+  <default>
+    <joint solreflimit="0.02 0.5" stiffness="0.01" limited="true" range="-24.4496 24.4496" armature="0.01" damping="0.2"/>
+  </default>
+
+  <worldbody>
+    <body name="base">
+      <!geom size="2 2 0.1" pos="0 0 -0.053" type="plane" rgba="0 0 1 0.6"/>
+      <body name="seg_13">
+        <geom name="g_13" size="0.0458798 0.0458798 0.0258984" pos="0 0 0.0258984" type="box" density="1100" rgba="0.2 0.7 0.2 0.7"/>
+        <site name="site_imu_13" pos="0 0 0.0258984" size="0.001" rgba="1 0 1 1"/>
+        <site name="site_in_13_0" pos="0.0408634 0 0.0142884" size="0.001" rgba="1 1 0 1"/>
+        <site name="site_out_13_0" pos="0.0384285 0 0.0448985" size="0.001" rgba="1 1 0 1"/>
+        <site name="site_in_13_1" pos="-0.0408634 0 0.0142884" size="0.001" rgba="1 1 0 1"/>
+        <site name="site_out_13_1" pos="-0.0384285 0 0.0448985" size="0.001" rgba="1 1 0 1"/>
+        <body name="seg_12" pos="0 0 0.0517968">
+          <joint name="j_12" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="0.0001" frictionloss="4.16861"/>
+          <geom name="g_12" size="0.0420991 0.0420991 0.0237643" pos="0 0 0.0237643" type="box" density="1100" rgba="0.6 0.75 0.95 0.7"/>
+          <site name="site_imu_12" pos="0 0 0.0237643" size="0.001" rgba="1 0 1 1"/>
+          <site name="site_in_12_0" pos="0.0368547 0 0.0128867" size="0.001" rgba="1 1 0 1"/>
+          <site name="site_out_12_0" pos="0.0345931 0 0.0413187" size="0.001" rgba="1 1 0 1"/>
+          <site name="site_in_12_1" pos="-0.0368547 0 0.0128867" size="0.001" rgba="1 1 0 1"/>
+          <site name="site_out_12_1" pos="-0.0345931 0 0.0413187" size="0.001" rgba="1 1 0 1"/>
+          <body name="seg_11" pos="0 0 0.0475285">
+            <joint name="j_11" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="2.18662" frictionloss="4.68605"/>
+            <geom name="g_11" size="0.03863 0.03863 0.021806" pos="0 0 0.021806" type="box" density="1100" rgba="0.2 0.7 0.2 0.7"/>
+            <site name="site_imu_11" pos="0 0 0.021806" size="0.001" rgba="1 0 1 1"/>
+            <site name="site_in_11_0" pos="0.0331764 0 0.0116005" size="0.001" rgba="1 1 0 1"/>
+            <site name="site_out_11_0" pos="0.0310737 0 0.038034" size="0.001" rgba="1 1 0 1"/>
+            <site name="site_in_11_1" pos="-0.0331764 0 0.0116005" size="0.001" rgba="1 1 0 1"/>
+            <site name="site_out_11_1" pos="-0.0310737 0 0.038034" size="0.001" rgba="1 1 0 1"/>
+            <body name="seg_10" pos="0 0 0.043612">
+              <joint name="j_10" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="8.3774" frictionloss="5.24351"/>
+              <geom name="g_10" size="0.0354467 0.0354467 0.0200091" pos="0 0 0.0200091" type="box" density="1100" rgba="0.6 0.75 0.95 0.7"/>
+              <site name="site_imu_10" pos="0 0 0.0200091" size="0.001" rgba="1 0 1 1"/>
+              <site name="site_in_10_0" pos="0.0298011 0 0.0104203" size="0.001" rgba="1 1 0 1"/>
+              <site name="site_out_10_0" pos="0.0278443 0 0.0350199" size="0.001" rgba="1 1 0 1"/>
+              <site name="site_in_10_1" pos="-0.0298011 0 0.0104203" size="0.001" rgba="1 1 0 1"/>
+              <site name="site_out_10_1" pos="-0.0278443 0 0.0350199" size="0.001" rgba="1 1 0 1"/>
+              <body name="seg_9" pos="0 0 0.0400182">
+                <joint name="j_9" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="15.6334" frictionloss="5.80673"/>
+                <geom name="g_9" size="0.0325258 0.0325258 0.0183603" pos="0 0 0.0183603" type="box" density="1100" rgba="0.2 0.7 0.2 0.7"/>
+                <site name="site_imu_9" pos="0 0 0.0183603" size="0.001" rgba="1 0 1 1"/>
+                <site name="site_in_9_0" pos="0.026704 0 0.00933739" size="0.001" rgba="1 1 0 1"/>
+                <site name="site_out_9_0" pos="0.0248811 0 0.0322541" size="0.001" rgba="1 1 0 1"/>
+                <site name="site_in_9_1" pos="-0.026704 0 0.00933739" size="0.001" rgba="1 1 0 1"/>
+                <site name="site_out_9_1" pos="-0.0248811 0 0.0322541" size="0.001" rgba="1 1 0 1"/>
+                <body name="seg_8" pos="0 0 0.0367205">
+                  <joint name="j_8" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="23.9087" frictionloss="6.34144"/>
+                  <geom name="g_8" size="0.0298455 0.0298455 0.0168473" pos="0 0 0.0168473" type="box" density="1100" rgba="0.6 0.75 0.95 0.7"/>
+                  <site name="site_imu_8" pos="0 0 0.0168473" size="0.001" rgba="1 0 1 1"/>
+                  <site name="site_in_8_0" pos="0.0238621 0 0.00834368" size="0.001" rgba="1 1 0 1"/>
+                  <site name="site_out_8_0" pos="0.022162 0 0.0297163" size="0.001" rgba="1 1 0 1"/>
+                  <site name="site_in_8_1" pos="-0.0238621 0 0.00834368" size="0.001" rgba="1 1 0 1"/>
+                  <site name="site_out_8_1" pos="-0.022162 0 0.0297163" size="0.001" rgba="1 1 0 1"/>
+                  <body name="seg_7" pos="0 0 0.0336946">
+                    <joint name="j_7" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="33.1575" frictionloss="6.81336"/>
+                    <geom name="g_7" size="0.0273861 0.0273861 0.015459" pos="0 0 0.015459" type="box" density="1100" rgba="0.2 0.7 0.2 0.7"/>
+                    <site name="site_imu_7" pos="0 0 0.015459" size="0.001" rgba="1 0 1 1"/>
+                    <site name="site_in_7_0" pos="0.0212543 0 0.00743186" size="0.001" rgba="1 1 0 1"/>
+                    <site name="site_out_7_0" pos="0.019667 0 0.0273876" size="0.001" rgba="1 1 0 1"/>
+                    <site name="site_in_7_1" pos="-0.0212543 0 0.00743186" size="0.001" rgba="1 1 0 1"/>
+                    <site name="site_out_7_1" pos="-0.019667 0 0.0273876" size="0.001" rgba="1 1 0 1"/>
+                    <body name="seg_6" pos="0 0 0.030918">
+                      <joint name="j_6" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="43.334" frictionloss="7.18823"/>
+                      <geom name="g_6" size="0.0251294 0.0251294 0.0141851" pos="0 0 0.0141851" type="box" density="1100" rgba="0.6 0.75 0.95 0.7"/>
+                      <site name="site_imu_6" pos="0 0 0.0141851" size="0.001" rgba="1 0 1 1"/>
+                      <site name="site_in_6_0" pos="0.0188615 0 0.00659517" size="0.001" rgba="1 1 0 1"/>
+                      <site name="site_out_6_0" pos="0.0173775 0 0.0252508" size="0.001" rgba="1 1 0 1"/>
+                      <site name="site_in_6_1" pos="-0.0188615 0 0.00659517" size="0.001" rgba="1 1 0 1"/>
+                      <site name="site_out_6_1" pos="-0.0173775 0 0.0252508" size="0.001" rgba="1 1 0 1"/>
+                      <body name="seg_5" pos="0 0 0.0283703">
+                        <joint name="j_5" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="54.3923" frictionloss="7.43178"/>
+                        <geom name="g_5" size="0.0230586 0.0230586 0.0130162" pos="0 0 0.0130162" type="box" density="1100" rgba="0.2 0.7 0.2 0.7"/>
+                        <site name="site_imu_5" pos="0 0 0.0130162" size="0.001" rgba="1 0 1 1"/>
+                        <site name="site_in_5_0" pos="0.0166659 0 0.00582743" size="0.001" rgba="1 1 0 1"/>
+                        <site name="site_out_5_0" pos="0.0152768 0 0.0232901" size="0.001" rgba="1 1 0 1"/>
+                        <site name="site_in_5_1" pos="-0.0166659 0 0.00582743" size="0.001" rgba="1 1 0 1"/>
+                        <site name="site_out_5_1" pos="-0.0152768 0 0.0232901" size="0.001" rgba="1 1 0 1"/>
+                        <body name="seg_4" pos="0 0 0.0260324">
+                          <joint name="j_4" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="66.2867" frictionloss="7.50975"/>
+                          <geom name="g_4" size="0.0211585 0.0211585 0.0119436" pos="0 0 0.0119436" type="box" density="1100" rgba="0.6 0.75 0.95 0.7"/>
+                          <site name="site_imu_4" pos="0 0 0.0119436" size="0.001" rgba="1 0 1 1"/>
+                          <site name="site_in_4_0" pos="0.0146511 0 0.00512296" size="0.001" rgba="1 1 0 1"/>
+                          <site name="site_out_4_0" pos="0.0133491 0 0.021491" size="0.001" rgba="1 1 0 1"/>
+                          <site name="site_in_4_1" pos="-0.0146511 0 0.00512296" size="0.001" rgba="1 1 0 1"/>
+                          <site name="site_out_4_1" pos="-0.0133491 0 0.021491" size="0.001" rgba="1 1 0 1"/>
+                          <body name="seg_3" pos="0 0 0.0238873">
+                            <joint name="j_3" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="78.9712" frictionloss="7.38785"/>
+                            <geom name="g_3" size="0.019415 0.019415 0.0109594" pos="0 0 0.0109594" type="box" density="1100" rgba="0.2 0.7 0.2 0.7"/>
+                            <site name="site_imu_3" pos="0 0 0.0109594" size="0.001" rgba="1 0 1 1"/>
+                            <site name="site_in_3_0" pos="0.0128024 0 0.00447653" size="0.001" rgba="1 1 0 1"/>
+                            <site name="site_out_3_0" pos="0.0115803 0 0.0198401" size="0.001" rgba="1 1 0 1"/>
+                            <site name="site_in_3_1" pos="-0.0128024 0 0.00447653" size="0.001" rgba="1 1 0 1"/>
+                            <site name="site_out_3_1" pos="-0.0115803 0 0.0198401" size="0.001" rgba="1 1 0 1"/>
+                            <body name="seg_2" pos="0 0 0.0219189">
+                              <joint name="j_2" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="92.4" frictionloss="7.03183"/>
+                              <geom name="g_2" size="0.0178151 0.0178151 0.0100563" pos="0 0 0.0100563" type="box" density="1100" rgba="0.6 0.75 0.95 0.7"/>
+                              <site name="site_imu_2" pos="0 0 0.0100563" size="0.001" rgba="1 0 1 1"/>
+                              <site name="site_in_2_0" pos="0.0111061 0 0.00388338" size="0.001" rgba="1 1 0 1"/>
+                              <site name="site_out_2_0" pos="0.00995728 0 0.0183252" size="0.001" rgba="1 1 0 1"/>
+                              <site name="site_in_2_1" pos="-0.0111061 0 0.00388338" size="0.001" rgba="1 1 0 1"/>
+                              <site name="site_out_2_1" pos="-0.00995728 0 0.0183252" size="0.001" rgba="1 1 0 1"/>
+                              <body name="seg_1" pos="0 0 0.0201127">
+                                <joint name="j_1" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="106.527" frictionloss="6.40742"/>
+                                <geom name="g_1" size="0.0163471 0.0163471 0.00922765" pos="0 0 0.00922765" type="box" density="1100" rgba="0.2 0.7 0.2 0.7"/>
+                                <site name="site_imu_1" pos="0 0 0.00922765" size="0.001" rgba="1 0 1 1"/>
+                                <site name="site_in_1_0" pos="0.00954949 0 0.0033391" size="0.001" rgba="1 1 0 1"/>
+                                <site name="site_out_1_0" pos="0.00846798 0 0.0169352" size="0.001" rgba="1 1 0 1"/>
+                                <site name="site_in_1_1" pos="-0.00954949 0 0.0033391" size="0.001" rgba="1 1 0 1"/>
+                                <site name="site_out_1_1" pos="-0.00846798 0 0.0169352" size="0.001" rgba="1 1 0 1"/>
+                                <body name="seg_0" pos="0 0 0.0184553">
+                                  <joint name="j_0" pos="0 0 0" axis="0 1 0" solreflimit="0.106135 0.827954" solimplimit="0.806066 0.961097 0.00789033" solreffriction="0.0385915 4.98594" solimpfriction="0.542383 0.947892 0.00976877" stiffness="0.1" range="-0.513643 0.513643" armature="0.0997059" damping="121.307" frictionloss="5.48034"/>
+                                  <geom name="g_0" size="0.015 0.015 0.00846725" pos="0 0 0.00846725" type="box" density="1100" rgba="0.6 0.75 0.95 0.7"/>
+                                  <site name="site_imu_0" pos="0 0 0.00846725" size="0.001" rgba="1 0 1 1"/>
+                                  <site name="site_in_0_0" pos="0.00812118 0 0.00283968" size="0.001" rgba="1 1 0 1"/>
+                                  <site name="site_out_0_0" pos="0.0071014 0 0.0156597" size="0.001" rgba="1 1 0 1"/>
+                                  <site name="site_in_0_1" pos="-0.00812118 0 0.00283968" size="0.001" rgba="1 1 0 1"/>
+                                  <site name="site_out_0_1" pos="-0.0071014 0 0.0156597" size="0.001" rgba="1 1 0 1"/>
+                                  <site name="site_tcp" pos="0 0 0.0169345" size="0.003" rgba="1 0 0 1"/>
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <contact>
+    <exclude body1="seg_13" body2="seg_12"/>
+  </contact>
+
+  <tendon>
+    <spatial name="tendon_0" stiffness="15.2999" damping="2.01613" frictionloss="0.279851" width="0.001" rgba="1 0 0 1">
+      <site site="site_in_13_0"/>
+      <site site="site_out_13_0"/>
+      <site site="site_in_12_0"/>
+      <site site="site_out_12_0"/>
+      <site site="site_in_11_0"/>
+      <site site="site_out_11_0"/>
+      <site site="site_in_10_0"/>
+      <site site="site_out_10_0"/>
+      <site site="site_in_9_0"/>
+      <site site="site_out_9_0"/>
+      <site site="site_in_8_0"/>
+      <site site="site_out_8_0"/>
+      <site site="site_in_7_0"/>
+      <site site="site_out_7_0"/>
+      <site site="site_in_6_0"/>
+      <site site="site_out_6_0"/>
+      <site site="site_in_5_0"/>
+      <site site="site_out_5_0"/>
+      <site site="site_in_4_0"/>
+      <site site="site_out_4_0"/>
+      <site site="site_in_3_0"/>
+      <site site="site_out_3_0"/>
+      <site site="site_in_2_0"/>
+      <site site="site_out_2_0"/>
+      <site site="site_in_1_0"/>
+      <site site="site_out_1_0"/>
+      <site site="site_in_0_0"/>
+      <site site="site_out_0_0"/>
+    </spatial>
+    <spatial name="tendon_1" stiffness="15.2999" damping="2.01613" frictionloss="0.279851" width="0.001" rgba="1 0 0 1">
+      <site site="site_in_13_1"/>
+      <site site="site_out_13_1"/>
+      <site site="site_in_12_1"/>
+      <site site="site_out_12_1"/>
+      <site site="site_in_11_1"/>
+      <site site="site_out_11_1"/>
+      <site site="site_in_10_1"/>
+      <site site="site_out_10_1"/>
+      <site site="site_in_9_1"/>
+      <site site="site_out_9_1"/>
+      <site site="site_in_8_1"/>
+      <site site="site_out_8_1"/>
+      <site site="site_in_7_1"/>
+      <site site="site_out_7_1"/>
+      <site site="site_in_6_1"/>
+      <site site="site_out_6_1"/>
+      <site site="site_in_5_1"/>
+      <site site="site_out_5_1"/>
+      <site site="site_in_4_1"/>
+      <site site="site_out_4_1"/>
+      <site site="site_in_3_1"/>
+      <site site="site_out_3_1"/>
+      <site site="site_in_2_1"/>
+      <site site="site_out_2_1"/>
+      <site site="site_in_1_1"/>
+      <site site="site_out_1_1"/>
+      <site site="site_in_0_1"/>
+      <site site="site_out_0_1"/>
+    </spatial>
+  </tendon>
+
+  <actuator>
+    <general name="tendon_act_0" tendon="tendon_0" ctrlrange="-150 0" forcerange="-200 200"/>
+    <general name="tendon_act_1" tendon="tendon_1" ctrlrange="-150 0" forcerange="-200 200"/>
+  </actuator>
+
+  <sensor>
+
+    <tendonactuatorfrc tendon="tendon_0" name="tendonfrc_0"/>
+
+    <tendonpos tendon="tendon_0" name="tendonpos_0"/>
+
+    <tendonvel tendon="tendon_0" name="tendonvel_0"/>
+
+    <tendonactuatorfrc tendon="tendon_1" name="tendonfrc_1"/>
+
+    <tendonpos tendon="tendon_1" name="tendonpos_1"/>
+
+    <tendonvel tendon="tendon_1" name="tendonvel_1"/>
+    <jointpos joint="j_0" name="jointpos_0"/>
+    <jointvel joint="j_0" name="jointvel_0"/>
+    <jointpos joint="j_1" name="jointpos_1"/>
+    <jointvel joint="j_1" name="jointvel_1"/>
+    <jointpos joint="j_2" name="jointpos_2"/>
+    <jointvel joint="j_2" name="jointvel_2"/>
+    <jointpos joint="j_3" name="jointpos_3"/>
+    <jointvel joint="j_3" name="jointvel_3"/>
+    <jointpos joint="j_4" name="jointpos_4"/>
+    <jointvel joint="j_4" name="jointvel_4"/>
+    <jointpos joint="j_5" name="jointpos_5"/>
+    <jointvel joint="j_5" name="jointvel_5"/>
+    <jointpos joint="j_6" name="jointpos_6"/>
+    <jointvel joint="j_6" name="jointvel_6"/>
+    <jointpos joint="j_7" name="jointpos_7"/>
+    <jointvel joint="j_7" name="jointvel_7"/>
+    <jointpos joint="j_8" name="jointpos_8"/>
+    <jointvel joint="j_8" name="jointvel_8"/>
+    <jointpos joint="j_9" name="jointpos_9"/>
+    <jointvel joint="j_9" name="jointvel_9"/>
+    <jointpos joint="j_10" name="jointpos_10"/>
+    <jointvel joint="j_10" name="jointvel_10"/>
+    <jointpos joint="j_11" name="jointpos_11"/>
+    <jointvel joint="j_11" name="jointvel_11"/>
+    <jointpos joint="j_12" name="jointpos_12"/>
+    <jointvel joint="j_12" name="jointvel_12"/>
+    <gyro site="site_imu_0" name="gyro_0"/>
+    <accelerometer site="site_imu_0" name="acc_0"/>
+    <gyro site="site_imu_1" name="gyro_1"/>
+    <accelerometer site="site_imu_1" name="acc_1"/>
+    <gyro site="site_imu_2" name="gyro_2"/>
+    <accelerometer site="site_imu_2" name="acc_2"/>
+    <gyro site="site_imu_3" name="gyro_3"/>
+    <accelerometer site="site_imu_3" name="acc_3"/>
+    <gyro site="site_imu_4" name="gyro_4"/>
+    <accelerometer site="site_imu_4" name="acc_4"/>
+    <gyro site="site_imu_5" name="gyro_5"/>
+    <accelerometer site="site_imu_5" name="acc_5"/>
+    <gyro site="site_imu_6" name="gyro_6"/>
+    <accelerometer site="site_imu_6" name="acc_6"/>
+    <gyro site="site_imu_7" name="gyro_7"/>
+    <accelerometer site="site_imu_7" name="acc_7"/>
+    <gyro site="site_imu_8" name="gyro_8"/>
+    <accelerometer site="site_imu_8" name="acc_8"/>
+    <gyro site="site_imu_9" name="gyro_9"/>
+    <accelerometer site="site_imu_9" name="acc_9"/>
+    <gyro site="site_imu_10" name="gyro_10"/>
+    <accelerometer site="site_imu_10" name="acc_10"/>
+    <gyro site="site_imu_11" name="gyro_11"/>
+    <accelerometer site="site_imu_11" name="acc_11"/>
+    <gyro site="site_imu_12" name="gyro_12"/>
+    <accelerometer site="site_imu_12" name="acc_12"/>
+    <gyro site="site_imu_13" name="gyro_13"/>
+    <accelerometer site="site_imu_13" name="acc_13"/>
+  </sensor>
+</mujoco>

@@ -36,6 +36,14 @@ DEFAULT_MODEL = MODELS_DIR / "spirob_13seg.xml"
 IDENTIFIED_MODEL = MODELS_DIR / "spirob_13seg_identified.xml"
 """Same model with the real-to-sim CMA-ES parameters baked in."""
 
+RL_MODEL = MODELS_DIR / "spirob_13seg_rl.xml"
+"""The model the reinforcement-learning tasks train on.
+
+A *different* real-to-sim run than :data:`IDENTIFIED_MODEL` — the one the
+policies in ``rl/`` were trained against. Kept as its own file rather than
+folded into the other: swapping it silently changes every trained policy's
+dynamics. See ``models/README.md``."""
+
 DEFAULT_TRAJECTORY = TRAJECTORY_DIR / "spirob_tendon_trajectory_60s.parquet"
 """60 s reference recording: tendon forces + ArUco joint angles."""
 
@@ -61,6 +69,7 @@ __all__ = [
     "IDENTIFIED_DIR",
     "DEFAULT_MODEL",
     "IDENTIFIED_MODEL",
+    "RL_MODEL",
     "DEFAULT_TRAJECTORY",
     "DEFAULT_PARAMS",
     "build_dir",

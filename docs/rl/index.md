@@ -1,76 +1,76 @@
 # Reinforcement learning
 
-!!! warning "Not implemented"
-    This half of the repository is **scaffolded, not built**. The folder
-    structure, the brief and the interface contract exist; no training code
-    does.
-
 ## TL;DR
 
-The system-identification half is finished, and its conclusion dictates how this
-half must be built:
+The second half of this repository trains tendon-force policies for the SpiRob
+in [mjlab](https://github.com/mujocolab/mjlab) — Isaac-Lab's manager-based API
+on top of GPU-accelerated MuJoCo-Warp.
 
-**Do not train against a single calibrated model.** The identified parameters
-reproduce the real robot's gross motion (6.8° mean joint RMSE) but not its
-trajectory, and they are physically implausible. The residual gap is
-[structural, not a fitting problem](../sysid/results.md).
+* **Four goals on one tentacle**: [reach, shape, trajectory,
+  wrap](tasks.md), each crossed with a five-rung **sensor-ablation ladder**.
+  The actor sees only what the real rig can measure; the critic always sees the
+  full state, so a comparison across levels isolates the sensor suite.
+* **Domain randomisation is on by default**, phased in by a curriculum. That is
+  the direct consequence of the identification result: the fitted model is not
+  right, so a policy must not be trained as if it were.
+* The RL half lives in its own uv project (`rl/`, Python 3.13) because mjlab
+  brings torch, CUDA and MuJoCo-Warp; the identification half stays on 3.10 and
+  never sees them. See [Training](training.md).
+* A trained policy can leave simulation: [the rig bridge](rig.md) rebuilds the
+  exact observation vector from live sensor frames and closes the loop over
+  serial.
 
-The intended strategy is two-stage:
+```bash
+cd rl
+uv sync
+uv run train RlExplor-Spirob-Tcp-Reach --env.scene.num-envs 4096
+```
 
-1. Calibrate as far as the model structure allows — **done**.
-2. Bridge the rest with **domain randomisation**: train across a range of model
-   variants centred on the identified values.
+## How this follows from the identification
 
-Under domain randomisation the individual number matters much less, which is
-exactly why the implausibility of the identified set is tolerable.
+The identification chapter ends on a negative result: the three methods
+disagree, the fitted parameters are physically implausible, and the residual
+gap is [structural, not an optimisation problem](../sysid/results.md). The
+rigid-chain-plus-torsion-spring model has no term for tendon friction in the
+guide rings, TPU non-linearity or joint coupling, so the optimiser compensates
+with numbers that minimise cost and mean nothing physically.
 
-## What is available
+The practical conclusion is not "identify harder". It is:
 
-| Asset | Path |
+1. Calibrate as far as the model structure allows — **done**, that is `sysid/`.
+2. Treat the result as the *centre of a distribution*, not as the truth, and
+   train across that distribution.
+
+So the calibrated numbers enter here as the nominal XML values, and every
+dynamic parameter that the identification could not pin down is randomised
+around them in proportion to how poorly it is known. Under domain randomisation
+the individual number matters much less — which is exactly why the
+implausibility of the identified set is tolerable.
+
+## What exists
+
+| Piece | Where |
 |---|---|
-| Identified model | `models/spirob_13seg_identified.xml` |
-| Nominal model | `models/spirob_13seg.xml` |
-| Parameters as JSON | `data/identified/real2sim_cma_500iter.json` |
-| Parametric generator | `spirob.generate_xml_string(...)` |
-| Rollout loop, controllers, contact forces | `spirob.simulate` |
-| A real 60 s trajectory to check against | `data/trajectories/*.parquet` |
+| Task family (reach / shape / trajectory / wrap × 5 sensor levels) | `rl/src/spirob_rl/tasks/spirob/` |
+| Training / playback / inference entrypoints | `rl/src/spirob_rl/{train,play,run,infer}.py` |
+| The model the policies train on | `models/spirob_13seg_rl.xml` |
+| Measured table of statically holdable poses (shape task targets) | `rl/src/spirob_rl/tasks/spirob/holdable_poses.npz` |
+| Hardware bridge, target GUI, telemetry | `rl/src/spirob_rl/rig/` |
+| Reachability map of a trained reach policy | `rl/src/spirob_rl/rig/workspace_sweep.py` |
 
-## Suggested randomisation ranges
+## The interface between the two halves
 
-Randomise each parameter in proportion to how poorly the identification pinned
-it down:
+`sysid/` produces a model; `rl/` consumes one. Nothing in `sysid/` imports from
+`rl/` and nothing in `rl/` imports from `sysid/` — the handover is a tracked
+model XML and a parameter JSON, never a Python import. Both may use the shared
+library in `src/spirob/`, and both resolve every path through `spirob.paths`:
+the tasks load `RL_MODEL` from `models/`, and everything the RL scripts generate
+lands under `build/rl/`.
 
-| Parameter | Centre | Range | Why |
-|---|---|---|---|
-| joint stiffness | per-joint, 0.37–0.83 | ×[0.5, 2.0] | least identifiable — 28–158 % error even in the best case |
-| joint damping | per-joint, 2e-4…2e-3 | ×[0.3, 3.0] | 4–31 % error sim-to-sim |
-| tendon stiffness | from XML | ×[0.9, 1.1] | recovered to <5 %, so randomise least |
-| joint frictionloss | 0.15 (unmeasured) | [0, 0.4] | never measured — treat as fully uncertain |
-| segment mass | from geometry | ×[0.9, 1.1] | 3D-print infill varies |
+## Where to go next
 
-## Model facts
-
-* **13 hinge joints**, model index 0 = base (`j_12`), index 12 = tip (`j_0`).
-* **2 tendons**, 2 force actuators, `ctrlrange = [-150, 0]` — **pull only**.
-  A positive control value is a silent no-op. Assert it.
-* Joint limits ±24.45°, timestep 0.004 s, Newton solver, elliptic cone,
-  `impratio = 15`.
-* Measured tendon forces reach ~110 N.
-
-## Interface contract
-
-`sysid/` produces a model; `rl/` consumes one. No imports across that boundary —
-`rl/` reaches into the identification only through the artefacts above (a model
-XML and a parameter JSON), never by importing an identification script. Both may
-share `src/spirob/`.
-
-## Open questions
-
-* **Task** — tip reaching? grasping? shape following?
-* **Observation** — joint angles only (what ArUco can actually measure), or
-  privileged simulator state with an asymmetric critic?
-* **Action** — direct tendon forces, or a delta on a baseline controller?
-* **Real-robot loop** — only the two motor forces and rope lengths are available
-  live; joint angles need the camera. That constrains any deployable policy.
-
-Full brief: [`rl/README.md`](https://github.com/arben24/spirob-mjlab-sysid/blob/main/rl/README.md).
+* [Tasks](tasks.md) — the four goals, the sensor ladder, rewards and commands.
+* [Training](training.md) — environment setup, running a training, what the
+  knobs do, domain randomisation.
+* [Rig bridge](rig.md) — running a trained policy on the real robot, and the
+  workspace map.

@@ -1,98 +1,171 @@
 # Reinforcement Learning
 
-> **Status: scaffolded, not implemented.** This folder holds the brief, the
-> interface contract and the empty structure. No training code exists yet.
+Training tendon-force policies for the SpiRob with
+[**mjlab**](https://github.com/mujocolab/mjlab) (Isaac-Lab-style manager API on
+top of MuJoCo-Warp), plus the bridge that runs a trained policy on the real rig.
 
-## TL;DR for whoever builds this
+## TL;DR
 
-The system-identification half of this repository ([`sysid/`](../sysid/)) is
-finished, and its conclusion determines how the RL half must be built:
+* Four task variants on one tentacle — **reach**, **shape**, **trajectory**,
+  **wrap** — each crossed with a five-rung **sensor-ablation ladder**, so 40
+  registered task ids in total (each variant × level also has a `-DrPlay` twin).
+* The actor sees only what the rig can measure; the critic always sees the full
+  state. Which sensors the actor gets is the experiment.
+* **Domain randomisation is on by default**, ramped in by a curriculum. That is
+  the direct consequence of the identification result: the model is not right,
+  so do not train as if it were (see [`docs/sysid/results.md`](../docs/sysid/results.md)).
+* This folder is **its own uv project** (Python 3.13, own `.venv`). The
+  identification half stays on 3.10 and never sees torch.
 
-**Do not train against a single calibrated model.** The identified parameters
-reproduce the real robot's gross motion (6.8° mean joint RMSE) but not its
-trajectory, and they are physically implausible — the optimiser compensates for
-missing model terms (tendon friction in the guide rings, TPU non-linearity,
-joint coupling) with numbers that minimise cost and mean nothing. The residual
-sim-to-real gap is **structural**, not a matter of better fitting.
+```bash
+cd rl
+uv sync                                   # ~4 GB: torch, MuJoCo-Warp, mjlab
+uv run train RlExplor-Spirob-Tcp-Reach --env.scene.num-envs 4096
+uv run play  RlExplor-Spirob-Tcp-Reach --checkpoint-file ../build/rl/logs/<exp>/<run>/model_499.pt
+```
 
-The intended strategy is therefore two-stage:
+## Why a separate environment
 
-1. Calibrate the model as far as the current structure allows — done, see
-   [`data/identified/real2sim_cma_500iter.json`](../data/identified/).
-2. Bridge the rest with **domain randomisation**: train across a *range* of
-   model variants centred on those values, not on one exact set.
+mjlab pulls torch, CUDA and MuJoCo-Warp — several GB — and was developed against
+Python 3.13, while the identification half is pinned to 3.10 and its CI matrix
+runs 3.10/3.12. Two projects means installing mjlab cannot disturb a working
+sysid setup, and the RL side runs on the interpreter its stack was built for.
 
-Under domain randomisation the individual number matters much less, which is
-precisely why the implausibility of the identified set is tolerable.
+The root package is still a dependency (editable, from `..`): `spirob.paths` is
+how the tasks find `models/` and how every script here writes into `build/`.
+Nothing here imports from `sysid/`, and nothing in `sysid/` imports from here —
+`sysid/` produces a model, `rl/` consumes one.
 
-## What you are given
+## Commands
 
-| Asset | Path |
-|---|---|
-| Identified model, ready to load | `models/spirob_13seg_identified.xml` |
-| Nominal model | `models/spirob_13seg.xml` |
-| Parameter set as JSON (per joint, per tendon, solver knobs) | `data/identified/real2sim_cma_500iter.json` |
-| Parametric model generator | `spirob.generate_xml_string(...)` |
-| Rollout loop, controllers, contact forces | `spirob.simulate` |
-| A real 60 s trajectory to sanity-check against | `data/trajectories/*.parquet` |
+All of these run from `rl/`.
 
-## Interface contract
+```bash
+uv sync                                # create rl/.venv (Python 3.13)
+uv sync --extra hardware --extra dev   # + pyserial, pytest, ruff
 
-Keep `rl/` and `sysid/` independent. `sysid/` produces a model; `rl/` consumes
-one. Nothing in `sysid/` may import from `rl/`, and `rl/` should reach into
-`sysid/` only through the artefacts above — a model XML and a parameter JSON —
-never by importing an identification script.
+# Training. Checkpoints land in build/rl/logs/<experiment_name>/<timestamp>/.
+uv run train RlExplor-Spirob-Tcp-Reach --env.scene.num-envs 4096
+uv run train RlExplor-Spirob-Wrap-Imu --env.scene.num-envs 4096 --agent.logger tensorboard
 
-Both may share `src/spirob/`.
+# Watch a checkpoint in the viewer (add -DrPlay to watch it under full DR).
+uv run play RlExplor-Spirob-Tcp-Reach --checkpoint-file <path>/model_499.pt
+uv run play RlExplor-Spirob-Tcp-Reach-DrPlay --checkpoint-file <path>/model_499.pt
 
-## Model facts you need
+# Run a checkpoint on observations from a file or stdin (what the rig bridge uses).
+uv run infer RlExplor-Spirob-Tcp-Reach --obs-file obs.npy
 
-* **13 hinge joints**, model index 0 = base (`j_12`), index 12 = tip (`j_0`).
-  Every per-joint array in this repo is in model index order.
-* **2 tendons**, 2 force actuators, `ctrlrange = [-150, 0]` — **pull only**.
-  Positive control values are silently no-ops, which is a very easy sign bug to
-  ship. Assert it.
-* Joint limits: ±24.45° per joint.
-* Timestep 0.004 s, Newton solver, elliptic cone, `impratio = 15`.
-* Measured tendon forces reach ~110 N, so an action space must cover that.
+# Reachability map: drive a trained reach policy across a grid of targets.
+uv run python -m spirob_rl.rig.workspace_sweep --figure
+uv run python -m spirob_rl.rig.workspace_figure --sweep ../build/rl/workspace/sweep_*.npz --threshold 30
 
-## Suggested randomisation ranges
+# On the real rig (needs the hardware extra and the ESP32 firmware running).
+uv run python -m spirob_rl.rig.policy_bridge RlExplor-Spirob-Tcp-Reach-Imu \
+    --port /dev/ttyUSB0 --joint-port /dev/ttyUSB1 --dry-run
+uv run python -m spirob_rl.rig.target_gui     # commanded target vs. measured tip
 
-Centred on the identified values, widened by what the identification actually
-established:
+uv run --extra dev pytest              # task registration + env construction (needs a GPU)
+```
 
-| Parameter | Centre | Suggested range | Why |
-|---|---|---|---|
-| joint stiffness | per-joint, 0.37–0.83 | ×[0.5, 2.0] | the *least* identifiable quantity — 28–158 % error even in the best case |
-| joint damping | per-joint, 2e-4…2e-3 | ×[0.3, 3.0] | 4–31 % error sim-to-sim |
-| tendon stiffness | from XML | ×[0.9, 1.1] | recovered to <5 %, so randomise it least |
-| joint frictionloss | 0.15 (unmeasured) | [0, 0.4] | never measured at all — treat as fully uncertain |
-| segment mass | from geometry | ×[0.9, 1.1] | 3D-print infill varies |
+`--agent.logger tensorboard` is worth knowing: mjlab logs to **wandb** by
+default and will ask to log in on the first run.
 
-Rationale: randomise each parameter in proportion to how poorly it is known.
-See [`docs/sysid/results.md`](../docs/sysid/results.md) for where those error
-figures come from.
-
-## Planned layout
+## Layout
 
 ```
 rl/
-├── envs/       environment definitions (observation, action, reward, termination)
-├── configs/    training and randomisation configs
-└── scripts/    train / evaluate / export entry points
+├── pyproject.toml            own uv project (Python 3.13, mjlab)
+├── src/spirob_rl/
+│   ├── cli.py train.py       entrypoints: register the tasks, then call
+│   │   play.py run.py         mjlab's own train/play; default --log-root to build/
+│   ├── infer.py              load a checkpoint and detach it from the sim env
+│   ├── tasks/spirob/         THE TASK FAMILY (taken 1:1 from RL_explor)
+│   │   ├── base_env_cfg.py     entity, action, sensor ladder, DR, PPO config
+│   │   ├── reach_ shape_ trajectory_ wrap_env_cfg.py   one file per goal
+│   │   ├── mdp/                commands, rewards, observations, events, curriculum
+│   │   └── holdable_poses.npz  measured table of statically holdable poses
+│   └── rig/                  hardware bridge + workspace analysis
+│       └── acc_board/          joint angles from the 14-accelerometer board
+└── tests/
 ```
 
-The repository is named `spirob-mjlab-sysid` because
-[mjlab](https://github.com/mujocolab/mjlab) (MuJoCo-Warp based, Isaac-Lab-style)
-is the intended training stack. That choice is not yet locked in — nothing here
-depends on it.
+The MuJoCo model is **not** in this folder: it is
+[`models/spirob_13seg_rl.xml`](../models/README.md), tracked with every other
+model in the repository and resolved through `spirob.paths.RL_MODEL`.
 
-## Open questions
+## What was changed when the task was imported
 
-* **Task.** Reaching a target with the tip? Grasping? Following a shape?
-* **Observation.** Joint angles only (matching what ArUco can measure), or
-  privileged state in simulation with an asymmetric critic?
-* **Action.** Direct tendon forces, or a delta on top of a baseline controller?
-* **Real-robot loop.** Only the two motor forces and rope lengths are available
-  live; joint angles need the camera. That constrains any deployable policy's
-  observation space.
+The task family comes from the RL_explor repository it was developed in and is
+taken **1:1** — same commands, rewards, observations, domain randomisation, PPO
+configuration. Deliberately unchanged as well: the task ids
+(`RlExplor-Spirob-*`) and the experiment names (`rl_explor_spirob_*`), because
+those are the directory names existing checkpoints live under. Renaming one
+orphans every run trained before the rename.
+
+What *did* change, and why:
+
+| Change | Why |
+|---|---|
+| package renamed to `spirob_rl` | a top-level `spirob` package here would shadow the installed sysid library |
+| `spirob.xml` → `models/spirob_13seg_rl.xml`, reached via `spirob.paths.RL_MODEL` | models are tracked in `models/` and paths come from `spirob.paths` — a repository non-negotiable |
+| training logs → `build/rl/logs`, figures → `build/rl/…` | everything generated lands in `build/`, which is git-ignored |
+| figure language defaults to English, `SPIROB_FIG_LOCALE=de` switches | the repository is English; that variable is its one localisation mechanism |
+| the ESP32 firmware and the onboard-policy export were not imported | they belong to the rig repository and are not needed to train or to drive the robot from the host |
+
+## The task family
+
+Every variant is registered once per sensor level, e.g.
+`RlExplor-Spirob-Tcp-Reach-Imu`. The bare id is the `tendon` level.
+
+| Variant | Task id prefix | Goal |
+|---|---|---|
+| Reach | `RlExplor-Spirob-Tcp-Reach` | hold the TCP at a static random target on the reachable shell |
+| Shape | `RlExplor-Spirob-Shape` | hit a TCP *and* a mid-chain target — command the whole posture |
+| Trajectory | `RlExplor-Spirob-Trajectory` | follow a target sweeping along the arc, with preview points |
+| Wrap | `RlExplor-Spirob-Wrap` | coil around a randomly placed, randomly sized cylinder |
+
+Sensor ladder (actor only — the critic always gets joint angles, velocities and
+TCP position, so a comparison across levels isolates the sensor suite):
+
+| Suffix | Level | Actor sees | On the real rig |
+|---|---|---|---|
+| `-Force` | force | target + last action only | ✓ motor board alone |
+| *(none)* | tendon | + spool encoders (tendon length, velocity) | ✓ motor board alone |
+| `-Imu` | imu | + inclination of all 14 segments | ✓ motor + accelerometer board |
+| `-Joints` | joints | 13 joint angles and velocities | ✓ motor + accelerometer board |
+| `-Oracle` | oracle | + TCP position | ✗ not measurable |
+
+The action is always the same: two tendon forces, `[-1, 1]` mapped onto
+`[-150, 0]` N — **pull only**, a positive value is a silent no-op.
+
+## Domain randomisation
+
+`ENABLE_DOMAIN_RANDOMIZATION` / `ENABLE_DR_CURRICULUM` at the top of
+[`base_env_cfg.py`](src/spirob_rl/tasks/spirob/base_env_cfg.py) are the two
+switches; the final widths live in `DR_TARGETS` in
+[`mdp/constants.py`](src/spirob_rl/tasks/spirob/mdp/constants.py). Every term
+uses `operation="scale"` against the XML default, so the per-segment spread the
+model carries is preserved instead of being flattened by an absolute range, and
+the curriculum widens each term from no-op (1.0, 1.0) toward its target over the
+first 5000 policy steps.
+
+Flipping `ENABLE_DOMAIN_RANDOMIZATION` to `False` and training the same task
+again is the with-DR / without-DR pair; nothing else in the config changes.
+
+## Where the numbers come from
+
+`models/spirob_13seg_rl.xml` is an identified model — a *different* real-to-sim
+run than `models/spirob_13seg_identified.xml`, kept as its own file because
+swapping it silently changes every trained policy's dynamics. The identification
+found that such a fit reproduces gross motion but not the trajectory, and that
+the fitted parameters are physically implausible; the gap is
+[structural](../docs/sysid/results.md), not an optimisation failure. That is
+exactly why DR is on by default here rather than being an afterthought.
+
+## Further reading
+
+* [`docs/rl/`](../docs/rl/index.md) — the long-form write-up.
+* [`src/spirob_rl/tasks/spirob/WRAP_TASK.md`](src/spirob_rl/tasks/spirob/WRAP_TASK.md)
+  — the wrap task in detail (German).
+* [`src/spirob_rl/rig/COMMUNICATION_PROTOCOL.md`](src/spirob_rl/rig/COMMUNICATION_PROTOCOL.md)
+  — the serial protocol shared with the ESP32 firmware.

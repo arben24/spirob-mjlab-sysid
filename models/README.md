@@ -4,6 +4,7 @@
 |---|---|
 | `spirob_13seg.xml` | the nominal model — 13 joints, 2 tendons, 2 force actuators. The starting point of every identification run. |
 | `spirob_13seg_identified.xml` | the same model with the real-to-sim CMA-ES parameters baked in |
+| `spirob_13seg_rl.xml` | the model the reinforcement-learning tasks train on — see below |
 | `scene_demo.xml` | rendering-only wrapper: includes the identified model and adds lights, a skybox and a larger offscreen framebuffer. Used by `scripts/render_demo.py`. It changes nothing physical. |
 
 ## TL;DR
@@ -51,6 +52,27 @@ freshly generated model would silently clip the excitation.
 
 **If you regenerate the model, re-apply these edits** — or explicitly decide not
 to and re-run `--mode validate` to see what it costs you.
+
+## `spirob_13seg_rl.xml` — read this before swapping it
+
+The RL half ([`rl/`](../rl/)) trains against its own file, reached through
+`spirob.paths.RL_MODEL`. It is *not* `spirob_13seg_identified.xml`: it comes
+from a different real-to-sim run and differs in every fitted number
+(`solreflimit`, `solimplimit`, `armature`, per-joint `damping` and
+`frictionloss`, tendon parameters) plus `impratio` (18.78 instead of 15).
+
+Two consequences:
+
+* **Swapping the two silently changes every trained policy's dynamics.** A
+  checkpoint is only meaningful together with the model it was trained on, which
+  is why this is a separate tracked file rather than a switch.
+* **It has no ground plane.** The `<geom type="plane">` line is present but
+  misspelled as `<!geom …>`, which MuJoCo skips without complaint — the compiled
+  model has 14 geoms, all of them segments. Fixing the typo would *add* a floor
+  and therefore add contacts, so the file is kept byte-identical to what the
+  policies were trained against. `tests/test_model.py` pins the properties the
+  tasks depend on (tendon names, `site_tcp`, the 14 `site_imu_*`, the pull-only
+  `ctrlrange`, the rest-pose tendon length).
 
 ## Joint naming
 

@@ -1,0 +1,74 @@
+# The reinforcement-learning half of spirob-mjlab-sysid, as its own uv project.
+#
+# Deliberately NOT an extra of the root package: mjlab pulls torch + CUDA +
+# MuJoCo-Warp (several GB) and was developed against Python 3.13, while the
+# identification half is pinned to 3.10 and its CI matrix runs 3.10/3.12.
+# Keeping the two environments apart means installing mjlab cannot disturb a
+# working sysid setup, and the RL side runs on the interpreter its stack was
+# built for. The root package is still a dependency (editable, from ..): it is
+# where `spirob.paths` lives, which is how the tasks find `models/` and how
+# every script here writes into `build/`.
+[project]
+name = "spirob-rl"
+version = "0.1.0"
+description = "SpiRob reinforcement learning: mjlab tasks, training entrypoints and the hardware bridge"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "MIT" }
+authors = [{ name = "Nico Beyer" }]
+
+dependencies = [
+    "spirob-mjlab-sysid",
+    "mjlab>=1.3.0",
+    "warp-lang<1.13",
+    "tyro>=0.9.28",
+    "viser>=1.0.27",
+]
+
+[project.optional-dependencies]
+# Serial link to the two ESP32 boards (motor rig + accelerometer board).
+hardware = ["pyserial>=3.5"]
+dev = ["pytest>=8.0", "ruff>=0.14"]
+
+[project.scripts]
+train = "spirob_rl.train:main"
+play = "spirob_rl.play:main"
+run = "spirob_rl.run:main"
+infer = "spirob_rl.infer:main"
+
+[tool.uv.sources]
+# The sysid half, editable, so `spirob.paths` resolves to this checkout and
+# MODELS_DIR / BUILD_DIR point at the real repository root.
+spirob-mjlab-sysid = { path = "..", editable = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/spirob_rl"]
+
+[tool.hatch.build.targets.wheel.force-include]
+# The measured pose table the shape task samples targets from. Regenerate with
+# `uv run python -m spirob_rl.tasks.spirob._make_pose_table`.
+"src/spirob_rl/tasks/spirob/holdable_poses.npz" = "spirob_rl/tasks/spirob/holdable_poses.npz"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = ["-ra", "-q"]
+testpaths = ["tests"]
+
+[tool.ruff]
+# Inherit the repository's rule selection and line length, then relax exactly
+# what the imported code needs. `src/spirob_rl/tasks/` and `src/spirob_rl/rig/`
+# are taken 1:1 from the RL_explor repository they were developed in, and stay
+# mjlab-native (2-space indentation, mjlab's own import grouping, `Optional[X]`
+# in the argparse-based rig scripts). Reformatting them would buy nothing and
+# cost the ability to diff the two checkouts against each other. Everything
+# written for this repository -- the entrypoints, the tests -- is checked with
+# the repository's normal rules.
+extend = "../pyproject.toml"
+
+[tool.ruff.lint.per-file-ignores]
+"src/spirob_rl/tasks/**" = ["I001", "UP035", "UP037", "UP045"]
+"src/spirob_rl/rig/**" = ["I001", "UP035", "UP037", "UP045"]

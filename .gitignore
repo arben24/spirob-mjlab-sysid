@@ -51,7 +51,13 @@ htmlcov/
 .ipynb_checkpoints/
 
 # uv resolves from pyproject.toml; the lock file IS tracked for reproducibility.
-# (Do not add uv.lock here.)
+# (Do not add uv.lock here -- neither the root one nor rl/uv.lock.)
+
+# Training runs land in build/rl/logs (see rl/src/spirob_rl/cli.py), which the
+# build/ rule above already covers. These two only appear if a command was run
+# with an explicit --log-root or from a different working directory.
+logs/
+wandb/
 
 # =============================================================================
 # MuJoCo / simulation leftovers

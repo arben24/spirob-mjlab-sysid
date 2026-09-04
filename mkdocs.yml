@@ -1,5 +1,5 @@
-site_name: SpiRob — Model & System Identification
-site_description: MuJoCo model generation and experimental parameter identification for a tendon-driven logarithmic-spiral continuum robot
+site_name: SpiRob — Model, System Identification & RL
+site_description: MuJoCo model generation, experimental parameter identification and reinforcement learning for a tendon-driven logarithmic-spiral continuum robot
 site_author: Nico Beyer
 repo_url: https://github.com/arben24/spirob-mjlab-sysid
 repo_name: arben24/spirob-mjlab-sysid
@@ -47,6 +47,9 @@ nav:
       - Reproducing it: sysid/reproducing.md
   - Reinforcement learning:
       - rl/index.md
+      - Tasks: rl/tasks.md
+      - Training: rl/training.md
+      - Rig bridge: rl/rig.md
 
 markdown_extensions:
   - admonition

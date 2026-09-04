@@ -1,9 +1,9 @@
-# SpiRob — MuJoCo Model & System Identification
+# SpiRob — Model, System Identification & Reinforcement Learning
 
-MuJoCo model generation and experimental parameter identification for the
-**SpiRob**: a 3D-printed, tendon-driven quasi-continuum robot whose body follows
-a logarithmic spiral. The identified model is the starting point for
-reinforcement-learning experiments (see [`rl/`](rl/)).
+MuJoCo model generation, experimental parameter identification and
+reinforcement learning for the **SpiRob**: a 3D-printed, tendon-driven
+quasi-continuum robot whose body follows a logarithmic spiral. The identified
+model is what the policies in [`rl/`](rl/) train on.
 
 <p align="center">
   <img src="docs/img/spirob_demo.gif" alt="SpiRob curling under alternating tendon pull" width="640">
@@ -26,7 +26,11 @@ reinforcement-learning experiments (see [`rl/`](rl/)).
   guide rings, TPU non-linearity or joint coupling, so the optimiser compensates
   with numbers that minimise cost but mean nothing physically.
 * Practical consequence for RL: **do not train on one calibrated parameter set.**
-  Use these values as the centre of a domain-randomisation range.
+  Use these values as the centre of a domain-randomisation range — which is
+  exactly what [`rl/`](rl/) does: four tasks (reach, shape, trajectory, wrap) ×
+  five levels of actor observability, trained in
+  [mjlab](https://github.com/mujocolab/mjlab) with a domain-randomisation
+  curriculum on top of the identified model.
 
 ![Real-to-sim validation](docs/img/fig_real2sim_validation.png)
 
@@ -119,13 +123,15 @@ spirob-mjlab-sysid/
 ├── src/spirob/            Installed library: spiral maths, MJCF builder,
 │                          simulation loop, shared figure style, paths
 ├── models/                Tracked MuJoCo XML models
-├── sysid/                 SYSTEM IDENTIFICATION  ← this repo's subject
+├── sysid/                 SYSTEM IDENTIFICATION
 │   ├── direct/            measuring single joints on the hardware
 │   ├── simulation_based/  fitting the model to recorded motion
 │   ├── acquisition/       recording the data (needs hardware)
 │   ├── figures/           publication figures from the results
 │   └── tools/             interactive inspection of the identified model
-├── rl/                    REINFORCEMENT LEARNING  ← scaffolded, not built yet
+├── rl/                    REINFORCEMENT LEARNING  ← own uv project (mjlab, 3.13)
+│   ├── src/spirob_rl/tasks/   the task family: reach, shape, trajectory, wrap
+│   └── src/spirob_rl/rig/     bridge to the real robot + workspace analysis
 ├── data/                  Measured data (12 MB, tracked)
 ├── scripts/               Model generation, demo rendering
 ├── docs/                  MkDocs sources for the documentation site
@@ -133,7 +139,15 @@ spirob-mjlab-sysid/
 ```
 
 The two halves are deliberately separate: `sysid/` produces a calibrated model,
-`rl/` consumes one. Nothing in `sysid/` imports from `rl/` or vice versa.
+`rl/` consumes one. Nothing in `sysid/` imports from `rl/` or vice versa. They
+also have separate environments — mjlab needs Python 3.13 and several GB of
+torch/CUDA, the identification half runs on 3.10 — so `rl/` is its own uv
+project with its own `.venv`:
+
+```bash
+cd rl && uv sync
+uv run train RlExplor-Spirob-Tcp-Reach --env.scene.num-envs 4096
+```
 
 ---
 
@@ -144,7 +158,8 @@ The two halves are deliberately separate: `sysid/` produces a calibrated model,
 | understand the robot and the model | [`docs/model/`](docs/model/index.md) |
 | reproduce the identification | [`sysid/README.md`](sysid/README.md) |
 | understand the *method* and why it fails | [`docs/sysid/`](docs/sysid/index.md) |
-| build the RL side | [`rl/README.md`](rl/README.md) and [`CLAUDE.md`](CLAUDE.md) |
+| train a policy | [`rl/README.md`](rl/README.md) |
+| understand the RL tasks and the sim-to-real path | [`docs/rl/`](docs/rl/index.md) |
 | know what the data files are | [`data/README.md`](data/README.md) |
 
 The full documentation is published as a static site (MkDocs + GitHub Pages);
