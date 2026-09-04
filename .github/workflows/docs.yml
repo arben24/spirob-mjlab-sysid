@@ -5,8 +5,11 @@
 # site on every push and pull request so a broken build is caught in review;
 # `deploy` publishes, and only from `main`.
 #
-# One-time setup in the GitHub repository:
+# ONE-TIME SETUP, REQUIRED BEFORE THE FIRST DEPLOY:
 #   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
+# Until that is done the repository has no Pages site (the API reports
+# has_pages: false) and the deploy job fails with a 404 that names this exact
+# setting. Building the site does not create it.
 
 name: Documentation
 
@@ -20,10 +23,12 @@ on:
 permissions:
   contents: read
 
-# Never let two deploys race; let a newer push cancel an in-flight build.
+# Allow one deployment at a time. Queued runs are superseded, but a deployment
+# already in flight is never cancelled -- cancelling one can leave the published
+# site half-updated.
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -84,8 +89,14 @@ jobs:
 
   deploy:
     # Only publish from main; pull requests build but do not deploy.
-    # Guard deployment when Pages is disabled; otherwise deploy-pages returns 404.
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.event.repository.has_pages
+    #
+    # Do NOT add a `github.event.repository.has_pages` guard here. It looks like
+    # it prevents the 404 that deploy-pages raises when Pages is disabled, but
+    # it only converts that loud, linkable error into a green pipeline that
+    # publishes nothing -- which is far harder to diagnose. If this job fails
+    # with a 404, the fix is the one-time repository setting at the top of this
+    # file, not a condition on this job.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     permissions:
