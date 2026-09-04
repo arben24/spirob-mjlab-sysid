@@ -68,8 +68,6 @@ Across every configuration, tendon stiffness is recovered to within 5 %, joint
 damping to 4–31 %, but joint **stiffness only to 28–158 %** — it is barely
 identifiable from trajectory data.
 
-![DE vs CMA-ES](docs/img/fig_de_vs_cma.png)
-
 ---
 
 ## Installation
